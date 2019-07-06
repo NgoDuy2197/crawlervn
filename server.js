@@ -114,7 +114,7 @@ crossorigin="anonymous"></script>`
 // create a server with a host and port
 const server = new hapi.Server({
   host: 'localhost',
-  port: process.argv[2] || 8001
+  port: process.env.PORT || process.argv[2] || 8001
 });
 
 server.register(require('inert'));
