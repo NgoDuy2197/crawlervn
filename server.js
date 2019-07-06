@@ -20,6 +20,9 @@ let countTrung = 0
 let tongSo = 0
 let tientoLink = 'https://thiendia.com/diendan/'
 
+// create a server with a host and port
+var server = new hapi.Server(process.env.PORT || process.argv[2], '0.0.0.0');
+
 
 let header = `<head><style>
 /* The Modal (background) */
@@ -111,9 +114,6 @@ modal.style.display = "block";
 src="https://code.jquery.com/jquery-3.4.1.js"
 integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
 crossorigin="anonymous"></script>`
-// create a server with a host and port
-var server = new hapi.Server(+process.env.PORT || process.argv[2], '0.0.0.0');
-
 server.register(require('inert'));
 //ghi file data
 server.route({
