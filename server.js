@@ -112,10 +112,7 @@ src="https://code.jquery.com/jquery-3.4.1.js"
 integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
 crossorigin="anonymous"></script>`
 // create a server with a host and port
-const server = new hapi.Server({
-  host: 'localhost',
-  port: process.env.PORT || process.argv[2] || 8001
-});
+var server = new Hapi.Server(+process.env.PORT, '0.0.0.0');
 
 server.register(require('inert'));
 //ghi file data
