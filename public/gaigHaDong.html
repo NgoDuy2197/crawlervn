@@ -1,0 +1,90 @@
+<head><style>
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 10px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}</style></head>
+<button id="myBtn">Open Modal</button>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>
+      <img id='modalImage' src="" alt="" style="width: 100%;">
+    </p>
+  </div>
+
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+if (event.target == modal) {
+modal.style.display = "none";
+}
+}
+
+const imageClick = (id) => {
+let src = $(id).attr('src')
+$('#modalImage').attr('src',src)
+modal.style.display = "block";
+}
+</script>
+<script
+src="https://code.jquery.com/jquery-3.4.1.js"
+integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+crossorigin="anonymous"></script><div class='divImage' style='width:25%;float:left;'><img id='image0' onClick="imageClick('#image0')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/141ac5b4bd14315df.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image1' onClick="imageClick('#image1')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/27b85e629dd27cd19.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image2' onClick="imageClick('#image2')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/36efa9e8a371753e0.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image3' onClick="imageClick('#image3')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/458e6fbf666f35461.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image4' onClick="imageClick('#image4')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/54bbb0fd7297e06bc.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image5' onClick="imageClick('#image5')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/6d19bdae7eac7235c.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image6' onClick="imageClick('#image6')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/74b725525854b67c0.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image7' onClick="imageClick('#image7')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/81755d21cf5fded30.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image8' onClick="imageClick('#image8')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/9db97b9c4498b36ae.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image9' onClick="imageClick('#image9')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/10059e268f3d05e355.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image10' onClick="imageClick('#image10')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/11615ce62e6ee62824.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image11' onClick="imageClick('#image11')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/1240b9ce07594cdffa.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image12' onClick="imageClick('#image12')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/138aa402a5d16462d5.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image13' onClick="imageClick('#image13')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/14.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image14' onClick="imageClick('#image14')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/15/15.jpg"></img></div><div class='divImage' style='width:25%;float:left;'><img id='image15' onClick="imageClick('#image15')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/1a81b4b324311706f.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image16' onClick="imageClick('#image16')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/26238a7224f8869bd.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image17' onClick="imageClick('#image17')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/3f57288554bc4f35e.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image18' onClick="imageClick('#image18')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/4c3fd0c6d1ca3be11.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image19' onClick="imageClick('#image19')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/51268c006528e068a.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image20' onClick="imageClick('#image20')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/6a2d18f4f77b6faa1.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image21' onClick="imageClick('#image21')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/77e49205c21733fd5.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image22' onClick="imageClick('#image22')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/8e0587da6c9ce3219.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image23' onClick="imageClick('#image23')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/96bc8eea9b0be9941.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image24' onClick="imageClick('#image24')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/10a501408818cc143b.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image25' onClick="imageClick('#image25')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/111a477efa9f013705.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image26' onClick="imageClick('#image26')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/126a56ac9ad17cfcd7.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image27' onClick="imageClick('#image27')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/13a091edf9f189298f.jpg"></img></div>,<div class='divImage' style='width:25%;float:left;'><img id='image28' onClick="imageClick('#image28')" style='max-width: 100%;max-height: 100%;' src="https://greenupload.com/images/2018/11/21/14.jpg"></img></div>
