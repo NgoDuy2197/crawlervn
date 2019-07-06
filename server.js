@@ -129,7 +129,7 @@ server.route({
       //start(url, from,to, filename)
       dataAll = []
       let data = request.query
-        start(data.url,data.from,data.to,"./file/"+data.filename)
+        start(data.url,data.from,data.to,"./public/"+data.filename)
 
     return ({ message: 'Done' });
   }
