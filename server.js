@@ -5,7 +5,7 @@ var net = require('net');
 var fs = require('fs');
 const { Readable } = require('stream');
 const axios = require('axios');
-const hapi = require('@hapi/hapi');
+const Hapi = require('@hapi/hapi');
 
 // var Crawler = require("js-crawler");
 var Crawler = require("crawler");
