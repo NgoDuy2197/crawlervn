@@ -174,7 +174,7 @@ server.route({
         path: '/public/{file*}',
         handler: {
           directory: { 
-            path: 'file'
+            path: './public'
           }
         }
       })
