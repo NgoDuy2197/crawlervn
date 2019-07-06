@@ -24,7 +24,7 @@ let tientoLink = 'https://thiendia.com/diendan/'
 // var server = new hapi.Server(process.argv[2] || process.env.PORT, '0.0.0.0');
 
 	const server = Hapi.server({
-		port: 4000,
+		port: process.env.PORT,
 		host: '0.0.0.0'
 	});
 
