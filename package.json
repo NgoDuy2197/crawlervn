@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@hapi/hapi": "^18.3.1",
     "axios": "^0.19.0",
     "crawler": "^1.2.1",
     "crypto": "^1.0.1",
@@ -19,7 +20,6 @@
     "good": "^8.1.2",
     "good-console": "^8.0.0",
     "good-squeeze": "^5.1.0",
-    "hapi": "^18.1.0",
     "https": "^1.0.0",
     "i": "^0.3.6",
     "inert": "^5.1.3",
