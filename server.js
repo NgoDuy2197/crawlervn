@@ -21,7 +21,7 @@ let tongSo = 0
 let tientoLink = 'https://thiendia.com/diendan/'
 
 // create a server with a host and port
-var server = new hapi.Server(process.env.PORT || process.argv[2], '0.0.0.0');
+var server = new hapi.Server(process.argv[2] || process.env.PORT, '0.0.0.0');
 
 
 let header = `<head><style>
