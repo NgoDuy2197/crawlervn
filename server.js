@@ -17,6 +17,7 @@ let countHienTai = 0
 let id = 0
 let countTrung = 0
 let tongSo = 0
+let status = 'Chưa có dữ liệu'
 let tientoLink = 'https://thiendia.com/diendan/'
 
 // create a server with a host and port
@@ -108,6 +109,15 @@ crossorigin="anonymous"></script>`
 let downloadcontent = header
 
 server.register(require('inert'));
+//GET status
+
+server.route({
+  method: 'GET',
+  path: '/status',
+  handler: async (request, h) => {
+    return ({status:status})
+  }
+})
 //ghi file data
 server.route({
   method: 'GET',
@@ -173,6 +183,7 @@ server.route({
         handler: async (request, reply) => {
           // let stream = fs.createReadStream('./demo.html');
           // let streamData = new Readable().wrap(stream)
+          status = 'Đã tải file.'
           return reply.response(downloadcontent)
             .header('Content-Type', 'text/html')
             .header('Content-Disposition', 'attachment; filename= ' + 'duy.html')
@@ -187,6 +198,7 @@ server.route({
         // This will be called for each crawled page
         callback : async function (error, result, done) {
           try{
+            status = 'Chưa xong'
             await console.log('get image')
               let $ = result.$
               await addItem($).then((count)=>{
@@ -200,6 +212,7 @@ server.route({
           // This will be called for each crawled page
           callback : async function (error, result, done) {
             try{
+              status = 'Chưa xong'
             await console.log('get link')
               let $ = result.$
               let data = []
@@ -230,7 +243,7 @@ server.route({
             a = await a[0].children
             for(let ii=0; ii<a.length; ii++) {
               try{
-                if(a[ii].type == 'tag' && a[ii].name == 'img'){
+                if(a[ii].type == 'tag' && (a[ii].name == 'img' || a[ii].name == 'gif' || a[ii].name == 'video')){
                   await tongSo++
                   console.log((!dataAll.includes(a[ii].attribs.src)))
                   if (await !dataAll.includes(a[ii].attribs.src)){
@@ -243,6 +256,7 @@ server.route({
                 }
               }catch(e){}
             }
+            status = 'Chưa xong'
             await console.log('ghifile')
             downloadcontent +=await  dataImg.toString()
                 await fs.appendFileSync(filename,dataImg,'utf8',function (err) {
@@ -255,6 +269,7 @@ server.route({
                       }
                 });
             // console.log(`Tong: ${tongSo} - Trung: ${countTrung}`)
+              status = 'Có thể tải xuống'
               await console.log('---- Done -----')
               // await console.log(header)
           })
@@ -282,6 +297,7 @@ server.route({
               }
         })
 
+        status = 'Bắt đầu tạo file'
         await console.log('---- Start ----')
         
         await console.log(header)
