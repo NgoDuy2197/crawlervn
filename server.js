@@ -152,6 +152,17 @@ server.route({
         }
     }
   });
+//SAMPLE 
+    server.route({
+      method: 'GET',
+      path: '/sample',
+      handler: {
+        file: {
+            path: './sample.html',
+            confine: false
+        }
+    }
+  });
   //CREATE 
       server.route({
         method: 'GET',
