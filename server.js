@@ -128,11 +128,12 @@ server.route({
       //start(url, from,to, filename)
       dataAll = []
       let data = request.payload
+      data.urlPre ? tientoLink = data.urlPre : null
         start(data.url,data.from,data.to,"./public/"+data.filename,reply)
 
     // Tra ve ket qua sau 4s
     await (() => { return new Promise(resolve => setTimeout(resolve, 6000)); })();
-    status = 'Đã tải file.'
+    status = 'Đang tải file.'
     return reply.response(downloadcontent)
       .header('Content-Type', 'text/html')
       .header('Content-Disposition', 'attachment; filename= ' + 'duy.html')
