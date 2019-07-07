@@ -7,15 +7,47 @@
     <title>Document</title>
 </head>
 <body>
-    <iframe src="form" frameborder="0"  style="width:100%;"></iframe>
+        <iframe id='iframeCreateForm' style='background-color: rgb(160, 240, 140);width:100%;height: 170px;' onLoad="iframeCreateFormSubmit()" src="form" frameborder="0" ></iframe>
     <div>
+        <label for="status">Status: </label><span id='status'></span>
+        <br/>
         <input type="text" id='filename' value="demo.html">
-        <button onclick="openfile()">Open File</button>
+        <button onclick="openfile()">Tải file</button>
+        <!-- <button onclick="getStatus()"></button> -->
     </div>
     
-
     
 <script>
+    let iframeCreateForm = document.getElementById('iframeCreateForm')
+    let status = ''
+    let appReady = false
+
+
+    function iframeCreateFormSubmit() {
+        const interval = setInterval(
+            function(){
+                getStatus();
+                console.log(status); 
+                document.getElementById('status').innerHTML = `<span style='${status=='Có thể tải xuống'?"color:white;background:green;line-height: 20px;padding: 3px;":style="color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}</span>` 
+                if(status == 'Có thể tải xuống') {
+                    clearInterval(interval)
+                    const timeout = setTimeout(function(){ 
+                        document.getElementById('status').innerHTML = ''
+                        iframeCreateForm.src = iframeCreateForm.src 
+                        appReady = false
+                    }, 3000);
+                }
+        }, 1000);
+        if(!appReady) {clearInterval(interval);appReady=true;}
+    }
+const getStatus = async () => {
+    $.ajax({
+        url: "./status"
+    }).done(function(e) {
+        // $( this ).addClass( "done" );
+        status =  e.status
+    });
+}
 const openfile = () => {
     window.location.replace('./download')
 }
