@@ -1,4 +1,3 @@
-
 const good = require('good');
 const https = require('https');
 var net = require('net');
@@ -24,10 +23,9 @@ let tientoLink = 'https://thiendia.com/diendan/'
 // var server = new hapi.Server(process.argv[2] || process.env.PORT, '0.0.0.0');
 
 	const server = Hapi.server({
-		port: process.env.PORT,
+		port: process.env.PORT || 8001,
 		host: '0.0.0.0'
 	});
-
 
 let header = `<head><style>
 /* The Modal (background) */
@@ -44,7 +42,6 @@ let header = `<head><style>
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
@@ -53,7 +50,6 @@ let header = `<head><style>
   border: 1px solid #888;
   width: 80%;
 }
-
 /* The Close Button */
 .close {
   color: #aaaaaa;
@@ -61,7 +57,6 @@ let header = `<head><style>
   font-size: 28px;
   font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
   color: #000;
@@ -71,7 +66,6 @@ let header = `<head><style>
 <button id="myBtn">Open Modal</button>
 <!-- The Modal -->
 <div id="myModal" class="modal">
-
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -79,36 +73,28 @@ let header = `<head><style>
       <img id='modalImage' src="" alt="" style="width: 100%;">
     </p>
   </div>
-
 </div>
-
 <script>
 // Get the modal
 var modal = document.getElementById("myModal");
-
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
-
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
 modal.style.display = "block";
 }
-
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
 modal.style.display = "none";
 }
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
 if (event.target == modal) {
 modal.style.display = "none";
 }
 }
-
 const imageClick = (id) => {
 let src = $(id).attr('src')
 $('#modalImage').attr('src',src)
@@ -119,6 +105,8 @@ modal.style.display = "block";
 src="https://code.jquery.com/jquery-3.4.1.js"
 integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
 crossorigin="anonymous"></script>`
+let downloadcontent = header
+
 server.register(require('inert'));
 //ghi file data
 server.route({
@@ -176,6 +164,18 @@ server.route({
           directory: { 
             path: './public'
           }
+        }
+      })
+      //Download 
+      server.route({  
+        method: 'GET',
+        path: '/download',
+        handler: async (request, reply) => {
+          // let stream = fs.createReadStream('./demo.html');
+          // let streamData = new Readable().wrap(stream)
+          return reply.response(downloadcontent)
+            .header('Content-Type', 'text/html')
+            .header('Content-Disposition', 'attachment; filename= ' + 'duy.html')
         }
       })
 
@@ -244,6 +244,7 @@ server.route({
               }catch(e){}
             }
             await console.log('ghifile')
+            downloadcontent +=await  dataImg.toString()
                 await fs.appendFileSync(filename,dataImg,'utf8',function (err) {
                   //Kiểm tra nếu có lỗi thì xuất ra lỗi
                   if(err)
@@ -255,12 +256,16 @@ server.route({
                 });
             // console.log(`Tong: ${tongSo} - Trung: ${countTrung}`)
               await console.log('---- Done -----')
+              // await console.log(header)
           })
         }catch(e){}
       }
         //CHECK FILE EXIST
         countHienTai = 0
         count = 0
+        downloadcontent = header
+
+        
         if(await fs.existsSync(filename)){
           await fs.unlinkSync(filename)
         }
@@ -278,6 +283,8 @@ server.route({
         })
 
         await console.log('---- Start ----')
+        
+        await console.log(header)
         await c.queue(url);
         count = pageFrom>=1 ? pageFrom : 1
           for (count = 1; count <= pageTo; count++) {
