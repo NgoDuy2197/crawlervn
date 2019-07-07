@@ -129,7 +129,8 @@ server.route({
       dataAll = []
       let data = request.payload
       data.urlPre ? tientoLink = data.urlPre : null
-        start(data.url,data.from,data.to,"./public/"+data.filename,reply)
+      let url = data.url[data.url.length-1] != '/' ? data.url+'/' : null
+        start(url,data.from,data.to,"./public/"+data.filename,reply)
 
     // Tra ve ket qua sau 4s
     await (() => { return new Promise(resolve => setTimeout(resolve, 6000)); })();
