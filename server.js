@@ -109,6 +109,7 @@ crossorigin="anonymous"></script>`
 let downloadcontent = header
 
 server.register(require('inert'));
+server.register(require('hapi-response-time'))
 //GET status
 
 server.route({
@@ -120,16 +121,21 @@ server.route({
 })
 //ghi file data
 server.route({
-  method: 'GET',
+  method: 'POST',
   path: '/ghifile',
-  handler: async (request, h) => {
+  handler: async (request, reply) => {
     await console.log('get /ghifile')
       //start(url, from,to, filename)
       dataAll = []
-      let data = request.query
-        start(data.url,data.from,data.to,"./public/"+data.filename)
+      let data = request.payload
+        start(data.url,data.from,data.to,"./public/"+data.filename,reply)
 
-    return ({ message: 'Done' });
+    // Tra ve ket qua sau 4s
+    await (() => { return new Promise(resolve => setTimeout(resolve, 6000)); })();
+    status = 'Đã tải file.'
+    return reply.response(downloadcontent)
+      .header('Content-Type', 'text/html')
+      .header('Content-Disposition', 'attachment; filename= ' + 'duy.html')
   }
 });
                                                           //PAGE
@@ -156,16 +162,16 @@ server.route({
       }
     });
     //FORM 
-        server.route({
-          method: 'GET',
-          path: '/form',
-          handler: {
-            file: {
-                path: './form.html',
-                confine: false
-            }
-        }
-      });
+      //   server.route({
+      //     method: 'GET',
+      //     path: '/form',
+      //     handler: {
+      //       file: {
+      //           path: './form.html',
+      //           confine: false
+      //       }
+      //   }
+      // });
       //FILE 
       server.route({  
         method: 'GET',
@@ -305,7 +311,7 @@ server.route({
         count = pageFrom>=1 ? pageFrom : 1
           for (count = 1; count <= pageTo; count++) {
             try{
-              await c.queue(`${url}/page-${count+1}`);
+              await c.queue(`${url}page-${count+1}`);
             }catch(e){}
           }
         // await console.log('- dataAll -'+dataAll)
