@@ -7,23 +7,60 @@
     <title>Document</title>
 </head>
 <body>
-        <iframe id='iframeCreateForm' style='background-color: rgb(160, 240, 140);width:100%;height: 170px;' onLoad="iframeCreateFormSubmit()" src="form" frameborder="0" ></iframe>
-    <div>
-        <label for="status">Status: </label><span id='status'></span>
-        <br/>
-        <input type="text" id='filename' value="demo.html">
-        <button onclick="openfile()">Tải file</button>
-        <!-- <button onclick="getStatus()"></button> -->
-    </div>
+        <!-- <iframe id='iframeCreateForm' style='background-color: rgb(160, 240, 140);width:100%;height: 170px;' onLoad="iframeCreateFormSubmit()" src="form" frameborder="0" ></iframe> -->
+        
+    <form action="http://localhost:8001/ghifile" method="post">
+        <table>
+            <tr>
+                <td>URL: </td>
+                <td>
+                    <input id='url' name='url' type='text' placeholder="URL..." style="width:400px;" required/>
+                </td>
+            </tr>
+            <tr>
+                <td>From: </td>
+                <td>
+                    <input name='id' name='from' type='number' value='1' placeholder="From..."/>
+                </td>
+            </tr>
+            <tr>
+                <td>To: </td>
+                <td>
+                    <input id='to' name='to' type='number' value='84' placeholder="To..."/>
+                </td>
+            </tr>
+            <tr>
+                <td>Filename: </td>
+                <td>
+                    <input id='filename' name='filename' type='text' placeholder="File name..." value='demo.html' required/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="status">Status: </label>
+                </td>
+                <td>
+                    <span id='status' style="color:white;background:green;line-height: 20px;padding: 3px;">Hello !</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value='Send' id='btnSubmit' onclick="iframeCreateFormSubmit()">
+                </td>
+            </tr>
+        </table>
+    </form>
     
     
 <script>
-    let iframeCreateForm = document.getElementById('iframeCreateForm')
-    let status = ''
+    let status = 'Đang tải'
     let appReady = false
 
 
     function iframeCreateFormSubmit() {
+        status = 'Đang tải'
+        document.getElementById('status').innerHTML = `<span style='${status=='Có thể tải xuống'?"color:white;background:green;line-height: 20px;padding: 3px;":style="color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}</span>` 
+
         const interval = setInterval(
             function(){
                 getStatus();
@@ -32,13 +69,11 @@
                 if(status == 'Có thể tải xuống') {
                     clearInterval(interval)
                     const timeout = setTimeout(function(){ 
-                        document.getElementById('status').innerHTML = ''
-                        iframeCreateForm.src = iframeCreateForm.src 
+                        document.getElementById('status').innerHTML = 'Đang rảnh'
                         appReady = false
                     }, 3000);
                 }
         }, 1000);
-        if(!appReady) {clearInterval(interval);appReady=true;}
     }
 const getStatus = async () => {
     $.ajax({
