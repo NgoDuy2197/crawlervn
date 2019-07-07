@@ -1,7 +1,7 @@
 const good = require('good');
 const https = require('https');
 var net = require('net');
-var fs = require('fs');
+// var fs = require('fs');
 const { Readable } = require('stream');
 const axios = require('axios');
 const Hapi = require('@hapi/hapi');
@@ -17,7 +17,7 @@ let countHienTai = 0
 let id = 0
 let countTrung = 0
 let tongSo = 0
-let status = 'Chưa có dữ liệu'
+let status = 'Sẵn sàng'
 let tientoLink = 'https://thiendia.com/diendan/'
 
 // create a server with a host and port
@@ -129,7 +129,7 @@ server.route({
       dataAll = []
       let data = request.payload
       data.urlPre ? tientoLink = data.urlPre : null
-      let url = data.url[data.url.length-1] != '/' ? data.url+'/' : null
+      let url = data.url[data.url.length-1] != '/' ? data.url+'/' : data.url
         start(url,data.from,data.to,"./public/"+data.filename,reply)
 
     // Tra ve ket qua sau 4s
@@ -253,7 +253,7 @@ server.route({
               try{
                 if(a[ii].type == 'tag' && (a[ii].name == 'img' || a[ii].name == 'gif' || a[ii].name == 'video')){
                   await tongSo++
-                  console.log((!dataAll.includes(a[ii].attribs.src)))
+                  // console.log((!dataAll.includes(a[ii].attribs.src)))
                   if (await !dataAll.includes(a[ii].attribs.src)){
                     await dataAll.push(a[ii].attribs.src)
                     await dataImg.push(`<div class='divImage' style='width:25%;float:left;'><img id='image${id}' onClick="imageClick('#image${id++}')" style='max-width: 100%;max-height: 100%;' src="${a[ii].attribs.src}"></img></div>`)
@@ -267,15 +267,15 @@ server.route({
             status = 'Chưa xong'
             await console.log('ghifile')
             downloadcontent +=await  dataImg.toString()
-                await fs.appendFileSync(filename,dataImg,'utf8',function (err) {
-                  //Kiểm tra nếu có lỗi thì xuất ra lỗi
-                  if(err)
-                      throw err;
-                  else //nếu không thì hiển thị nội dung ghi file thành công
-                      {
-                        // console.log('Ghi file thanh cong!');
-                      }
-                });
+                // await fs.appendFileSync(filename,dataImg,'utf8',function (err) {
+                //   //Kiểm tra nếu có lỗi thì xuất ra lỗi
+                //   if(err)
+                //       throw err;
+                //   else //nếu không thì hiển thị nội dung ghi file thành công
+                //       {
+                //         // console.log('Ghi file thanh cong!');
+                //       }
+                // });
             // console.log(`Tong: ${tongSo} - Trung: ${countTrung}`)
               status = 'Có thể tải xuống'
               await console.log('---- Done -----')
@@ -289,26 +289,26 @@ server.route({
         downloadcontent = header
 
         
-        if(await fs.existsSync(filename)){
-          await fs.unlinkSync(filename)
-        }
-        else{
-        } 
+        // if(await fs.existsSync(filename)){
+        //   await fs.unlinkSync(filename)
+        // }
+        // else{
+        // } 
         // let header = '<head><style>.divImage{width: 25%;float:left;} .divImage:active{width: 100%;float:left;}</style></head>'
-        await fs.appendFileSync(filename,header,'utf8',function (err) {
-          //Kiểm tra nếu có lỗi thì xuất ra lỗi
-          if(err)
-              throw err;
-          else //nếu không thì hiển thị nội dung ghi file thành công
-              {
-                // console.log('Ghi file thanh cong!');
-              }
-        })
+        // await fs.appendFileSync(filename,header,'utf8',function (err) {
+        //   //Kiểm tra nếu có lỗi thì xuất ra lỗi
+        //   if(err)
+        //       throw err;
+        //   else //nếu không thì hiển thị nội dung ghi file thành công
+        //       {
+        //         // console.log('Ghi file thanh cong!');
+        //       }
+        // })
 
         status = 'Bắt đầu tạo file'
         await console.log('---- Start ----')
         
-        await console.log(header)
+        // await console.log(header)
         await c.queue(url);
         count = pageFrom>=1 ? pageFrom : 1
           for (count = 1; count <= pageTo; count++) {
