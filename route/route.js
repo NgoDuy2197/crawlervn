@@ -1,3 +1,9 @@
+
+let controller = require('../controller/crawlData')
+let status = 'Sẵn sàng'
+let header = require('../model/header')
+let downloadcontent = header
+// const { Readable } = require('stream')
 module.exports = [
     {  
       method: 'GET',
@@ -26,10 +32,8 @@ module.exports = [
             let data = request.payload
             data.urlPre ? tientoLink = data.urlPre : null
             let url = data.url[data.url.length-1] != '/' ? data.url+'/' : data.url
-              start(url,data.from,data.to,"./public/"+data.filename,reply)
+            let downloadcontent = await controller.crawlerTopic(url,data.from,data.to,"./public/"+data.filename)
       
-          // Tra ve ket qua sau 4s
-          await (() => { return new Promise(resolve => setTimeout(resolve, 6000)); })();
           status = 'Đang tải file.'
           return reply.response(downloadcontent)
             .header('Content-Type', 'text/html')

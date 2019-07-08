@@ -1,5 +1,17 @@
 
-    module.exports.crawlerTopic = async (url, pageFrom, pageTo,filename)=>{
+    
+var Crawler = require("crawler");
+let count = 0
+let maxConnect = 100
+let dataAll = []
+let countHienTai = 0
+let id = 0
+let countTrung = 0
+let tongSo = 0
+let tientoLink = 'https://thiendia.com/diendan/'
+let header = require('../model/header')
+let downloadcontent = header
+module.exports.crawlerTopic = async (url, pageFrom, pageTo)=>{
         var crawlerImage = new Crawler({
           maxConnections : maxConnect,
           // This will be called for each crawled page
@@ -78,6 +90,8 @@
               // console.log(`Tong: ${tongSo} - Trung: ${countTrung}`)
                 status = 'Có thể tải xuống'
                 await console.log('---- Done -----')
+                // Tra ve ket qua sau 4s
+                await (() => { return new Promise(resolve => setTimeout(resolve, 6000)); })();
                 // await console.log(header)
             })
           }catch(e){}

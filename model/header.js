@@ -1,4 +1,4 @@
-module.exports.header = `<head><style>
+module.exports=`<head><style>
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
