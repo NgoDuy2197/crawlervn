@@ -137,7 +137,7 @@ server.route({
     status = 'Đang tải file.'
     return reply.response(downloadcontent)
       .header('Content-Type', 'text/html')
-      .header('Content-Disposition', 'attachment; filename= ' + 'duy.html')
+      .header('Content-Disposition', 'attachment; filename= ' + 'demo.html')
   }
 });
                                                           //PAGE
@@ -205,7 +205,7 @@ server.route({
           status = 'Đã tải file.'
           return reply.response(downloadcontent)
             .header('Content-Type', 'text/html')
-            .header('Content-Disposition', 'attachment; filename= ' + 'duy.html')
+            .header('Content-Disposition', 'attachment; filename= ' + 'demo.html')
         }
       })
 
@@ -258,11 +258,11 @@ server.route({
           // await console.log('additem')
           let dataImg = []
           return new Promise(async (resolve, no) => {
-            let a = $('article blockquote')
-            a = await a[0].children
+            let a = $('img')
+            // a = await a[0].children
             for(let ii=0; ii<a.length; ii++) {
               try{
-                if(a[ii].type == 'tag' && (a[ii].name == 'img' || a[ii].name == 'gif' || a[ii].name == 'video')){
+                // if(a[ii].type == 'tag' && (a[ii].name == 'img' || a[ii].name == 'gif' || a[ii].name == 'video')){
                   await tongSo++
                   // console.log((!dataAll.includes(a[ii].attribs.src)))
                   if (await !dataAll.includes(a[ii].attribs.src)){
@@ -272,7 +272,7 @@ server.route({
                     await countTrung++
                     await dataAll.push(a[ii].attribs.src)
                   }
-                }
+                // }
               }catch(e){}
             }
             status = 'Chưa xong'
