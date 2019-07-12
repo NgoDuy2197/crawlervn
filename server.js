@@ -131,9 +131,9 @@ server.route({
       data.urlPre ? tientoLink = data.urlPre : null
       let url = data.url[data.url.length-1] != '/' ? data.url+'/' : data.url
         start(url,data.from,data.to,"./public/"+data.filename,reply)
-
+      let timecountdown = data.timecountdown
     // Tra ve ket qua sau 4s
-    await (() => { return new Promise(resolve => setTimeout(resolve, 6000)); })();
+    await (() => { return new Promise(resolve => setTimeout(resolve, timecountdown)); })();
     status = 'Đang tải file.'
     return reply.response(downloadcontent)
       .header('Content-Type', 'text/html')
