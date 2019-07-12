@@ -124,16 +124,32 @@ server.route({
   method: 'POST',
   path: '/ghifile',
   handler: async (request, reply) => {
-    await console.log('get /ghifile')
+    // await console.log('get /ghifile')
       //start(url, from,to, filename)
       dataAll = []
       let data = request.payload
       data.urlPre ? tientoLink = data.urlPre : null
       let url = data.url[data.url.length-1] != '/' ? data.url+'/' : data.url
         start(url,data.from,data.to,"./public/"+data.filename,reply)
-      let timecountdown = data.timecountdown
+      let timecountdown = data.timecountdown*1000
     // Tra ve ket qua sau 4s
-    await (() => { return new Promise(resolve => setTimeout(resolve, timecountdown)); })();
+    await (() => { return new Promise(async (resolve) => {
+      // let myInterval = setInterval(async()=>{
+      //   await console.log('interval')
+      //   if(status == 'Có thể tải xuống') {
+      //     status = 'Đang rảnh'
+      //     clearInterval(myInterval)
+      //     resolve()
+      //   }
+      // },1000)
+
+      
+      setTimeout(()=>{
+        status = 'Đang rảnh'
+        // clearInterval(myInterval)
+        resolve()
+      }, timecountdown)
+    }); })();
     status = 'Đang tải file.'
     return reply.response(downloadcontent)
       .header('Content-Type', 'text/html')
@@ -218,7 +234,7 @@ server.route({
         callback : async function (error, result, done) {
           try{
             status = 'Chưa xong'
-            await console.log('get image')
+            // await console.log('get image')
               let $ = result.$
               await addItem($).then((count)=>{
                 console.log('Added ' + count + ' items')
@@ -232,7 +248,7 @@ server.route({
           callback : async function (error, result, done) {
             try{
               status = 'Chưa xong'
-            await console.log('get link')
+            // await console.log('get link')
               let $ = result.$
               let data = []
               try {
@@ -276,7 +292,7 @@ server.route({
               }catch(e){}
             }
             status = 'Chưa xong'
-            await console.log('ghifile')
+            // await console.log('ghifile')
             downloadcontent +=await  dataImg.toString()
                 // await fs.appendFileSync(filename,dataImg,'utf8',function (err) {
                 //   //Kiểm tra nếu có lỗi thì xuất ra lỗi
@@ -289,7 +305,7 @@ server.route({
                 // });
             // console.log(`Tong: ${tongSo} - Trung: ${countTrung}`)
               status = 'Có thể tải xuống'
-              await console.log('---- Done -----')
+              // await console.log('---- Done -----')
               // await console.log(header)
           })
         }catch(e){}
@@ -327,7 +343,7 @@ server.route({
               await c.queue(`${url}page-${count+1}`);
             }catch(e){}
           }
-        // await console.log('- dataAll -'+dataAll)
+        await console.log('- dataAll -'+dataAll)
     }
 // set up logging
 const good_options = {
