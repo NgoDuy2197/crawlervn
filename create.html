@@ -51,8 +51,17 @@
                         <label for="timecountdown">Time Countdown: </label>
                     </td>
                     <td>
-                        <input id='timecountdown' name='timecountdown' type='number' value='6'
+                        <input id='timecountdown' name='timecountdown' type='number' value='10'
                             style="width:400px;" required /> <span style="color:red;" class='label'>*Bắt buộc</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="countdownstatus">Countdown status: </label>
+                    </td>
+                    <td>
+                        <span id='countdownstatus' class='label'
+                            style="color:white;background:green;line-height: 20px;padding: 3px;">countdownstatus !</span>
                     </td>
                 </tr>
                 <tr>
@@ -78,6 +87,7 @@
     <script>
         let status = 'Đang tải'
         let appReady = false
+        let timeleft = 0
 
 
         function iframeCreateFormSubmit() {
@@ -85,11 +95,18 @@
             status = 'Đang tải'
             document.getElementById('status').innerHTML = `<span style='${status == 'Có thể tải xuống' ? "color:white;background:green;line-height: 20px;padding: 3px;" : style = "color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}</span>`
 
+
+            timeleft = document.getElementById('timecountdown').value
+
+            const intervalCountDown = setInterval(()=>{
+                document.getElementById('countdownstatus').innerHTML = `<span style='color:white;background:green;line-height: 20px;padding: 3px;'>Tải xuống sau: ${timeleft!=0?timeleft--:''} giây</span>`
+            },1000)
+
             const interval = setInterval(
                 function () {
                     getStatus();
                     console.log(status);
-                    document.getElementById('status').innerHTML = `<span style='${status == 'Có thể tải xuống' ? "color:white;background:green;line-height: 20px;padding: 3px;" : style = "color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}</span>`
+                    document.getElementById('status').innerHTML = `<span style='${status == 'Có thể tải xuống' ? "color:white;background:green;line-height: 20px;padding: 3px;" : style = "color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}}</span>`
                     if (status == 'Có thể tải xuống') {
                         clearInterval(interval)
                         const timeout = setTimeout(function () {
