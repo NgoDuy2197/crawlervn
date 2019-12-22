@@ -13,14 +13,16 @@
     <!-- <iframe id='iframeCreateForm' style='background-color: rgb(160, 240, 140);width:100%;height: 170px;' onLoad="iframeCreateFormSubmit()" src="form" frameborder="0" ></iframe> -->
     <div class='container' style="background-color: lightpink;padding: 5px 50px; border-radius: 10px;">
         <a href="../" class='btn btn-danger'>Back</a>
-        <h1 class="text-left" style="color:yellow;background-color:rgb(0, 0, 0);padding: 10px;width:160px;">Tạo File</h1>
-        <form action="./ghifile" method="post">
+        <h1 class="text-left" style="color:yellow;background-color:rgb(0, 0, 0);padding: 10px;width:160px;">Tạo File
+        </h1>
+        <form id="myform" action="./ghifile" method="post">
             <table class='table'>
                 <tr>
                     <td><label for="status">Link (URL): </label></td>
                     <td>
                         <input id='url' name='url' type='text' placeholder="https://www.google.com/abc/xyz"
-                            style="width:400px;" required /> <span style="color:red;" class='label'>*Bắt buộc</span>
+                            style="width:400px;" value="https://thiendia.com/diendan/forums/some-swing.200/" required />
+                        <span style="color:red;" class='label'>*Bắt buộc</span>
                     </td>
                 </tr>
                 <tr>
@@ -35,7 +37,7 @@
                 <tr>
                     <td><label for="status">From: </label></td>
                     <td>
-                        <input name='id' name='from' type='number' value='1' placeholder="From..." /><span
+                        <input id='from' name='from' type='number' value='1' placeholder="From..." /><span
                             style="color:red;" class='label'>*Bắt buộc</span>
                     </td>
                 </tr>
@@ -51,8 +53,8 @@
                         <label for="timecountdown">Time Countdown: </label>
                     </td>
                     <td>
-                        <input id='timecountdown' name='timecountdown' type='number' value='10'
-                            style="width:400px;" required /> <span style="color:red;" class='label'>*Bắt buộc</span>
+                        <input id='timecountdown' name='timecountdown' type='number' value='10' style="width:400px;"
+                            required /> <span style="color:red;" class='label'>*Bắt buộc</span>
                     </td>
                 </tr>
                 <tr>
@@ -61,7 +63,8 @@
                     </td>
                     <td>
                         <span id='countdownstatus' class='label'
-                            style="color:white;background:green;line-height: 20px;padding: 3px;">countdownstatus !</span>
+                            style="color:white;background:green;line-height: 20px;padding: 3px;">countdownstatus
+                            !</span>
                     </td>
                 </tr>
                 <tr>
@@ -75,8 +78,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="submit" value='Send' id='btnSubmit' class='btn btn-success '
-                            onclick="iframeCreateFormSubmit()">
+                        <input type="button" value='Send' id='btnSubmit' class='btn btn-success ' onclick="view()">
                     </td>
                     <td></td>
                 </tr>
@@ -90,23 +92,45 @@
         let timeleft = 0
 
 
+        let view = async () => {
+            let arr = $("#myform").serializeArray()
+            let arrSend = []
+            for (let item of arr) {
+                let obj = {}
+                obj[item.name] = item.value
+                arrSend.push(item.value)
+            }
+            document.getElementById('status').innerHTML = "Đợi "+document.getElementById('timecountdown').value + " giây"
+            await $.post("./ghifile", { data: arrSend }).done(function (data) {
+                document.write(data)
+            });
+            // await $.ajax({
+            //     type: "POST",
+            //     url: "./ghifile",
+            //     data: arrSend,
+            // }).done(function (e) {
+            //     // $( this ).addClass( "done" );
+            //     // status = e.status
+            //     console.log(e)
+            // });
+        }
         function iframeCreateFormSubmit() {
-            if(document.getElementById('url').value == '') {return}
+            if (document.getElementById('url').value == '') { return }
             status = 'Đang tải'
             document.getElementById('status').innerHTML = `<span style='${status == 'Có thể tải xuống' ? "color:white;background:green;line-height: 20px;padding: 3px;" : style = "color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}</span>`
 
 
             timeleft = document.getElementById('timecountdown').value
 
-            const intervalCountDown = setInterval(()=>{
-                document.getElementById('countdownstatus').innerHTML = `<span style='color:white;background:green;line-height: 20px;padding: 3px;'>Tải xuống sau: ${timeleft!=0?timeleft--:''} giây</span>`
-            },1000)
+            const intervalCountDown = setInterval(() => {
+                document.getElementById('countdownstatus').innerHTML = `<span style='color:white;background:green;line-height: 20px;padding: 3px;'>Tải xuống sau: ${timeleft != 0 ? timeleft-- : ''} giây</span>`
+            }, 1000)
 
             const interval = setInterval(
-                function () {
-                    getStatus();
-                    console.log(status);
-                    document.getElementById('status').innerHTML = `<span style='${status == 'Có thể tải xuống' ? "color:white;background:green;line-height: 20px;padding: 3px;" : style = "color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}}</span>`
+                async function () {
+                    await getStatus();
+                    // console.log(status);
+                    document.getElementById('status').innerHTML = `<span style='${status == 'Có thể tải xuống' ? "color:white;background:green;line-height: 20px;padding: 3px;" : style = "color:white;background:red;line-height: 20px;padding: 3px;"}''>${status}</span>`
                     if (status == 'Có thể tải xuống') {
                         clearInterval(interval)
                         const timeout = setTimeout(function () {
@@ -117,7 +141,7 @@
                 }, 1000);
         }
         const getStatus = async () => {
-            $.ajax({
+            await $.ajax({
                 url: "./status"
             }).done(function (e) {
                 // $( this ).addClass( "done" );

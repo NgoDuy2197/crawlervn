@@ -23,10 +23,10 @@ let tientoLink = 'https://thiendia.com/diendan/'
 // create a server with a host and port
 // var server = new hapi.Server(process.argv[2] || process.env.PORT, '0.0.0.0');
 
-	const server = Hapi.server({
-		port: process.env.PORT || 8001,
-		host: '0.0.0.0'
-	});
+const server = Hapi.server({
+  port: process.env.PORT || 8001,
+  host: '127.0.0.1'
+});
 
 let header = `<head><style>
 /* The Modal (background) */
@@ -63,7 +63,23 @@ let header = `<head><style>
   color: #000;
   text-decoration: none;
   cursor: pointer;
-}</style></head>
+}
+.btnback {
+  position:fixed;
+  left: 10px;
+  border: none;
+  background-color: transparent;
+    width: 61px;
+    height: 61px;
+    background-size: contain;
+    background-image: url(./public/icon/backbtn.png);
+}
+.btnback:hover {
+  transform:scale(1.2);
+  transition:0.5s;
+}
+</style></head>
+<button onClick=goback() class="btnback"></button>
 <button id="myBtn">Open Modal</button>
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -76,6 +92,9 @@ let header = `<head><style>
   </div>
 </div>
 <script>
+function goback(){
+  location.reload()
+}
 // Get the modal
 var modal = document.getElementById("myModal");
 // Get the button that opens the modal
@@ -116,7 +135,7 @@ server.route({
   method: 'GET',
   path: '/status',
   handler: async (request, h) => {
-    return ({status:status})
+    return ({ status: status })
   }
 })
 //ghi file data
@@ -125,242 +144,201 @@ server.route({
   path: '/ghifile',
   handler: async (request, reply) => {
     // await console.log('get /ghifile')
-      //start(url, from,to, filename)
-      dataAll = []
-      let data = request.payload
-      data.urlPre ? tientoLink = data.urlPre : null
-      let url = data.url[data.url.length-1] != '/' ? data.url+'/' : data.url
-        start(url,data.from,data.to,"./public/"+data.filename,reply)
-      let timecountdown = data.timecountdown*1000
+    //start(url, from,to, filename)
+    dataAll = []
+    let data = request.payload["data[]"]
+    let url = data[0], urlPre = data[1], from = data[2], to = data[3], timecountdown = data[4]
+    urlPre ? tientoLink = urlPre : null
+    url = url[url.length - 1] != '/' ? url + '/' : url
+    await start(url, from, to, "./public/" + data.filename, reply)
+    timecountdown = timecountdown * 1000
     // Tra ve ket qua sau 4s
-    await (() => { return new Promise(async (resolve) => {
-      // let myInterval = setInterval(async()=>{
-      //   await console.log('interval')
-      //   if(status == 'Có thể tải xuống') {
-      //     status = 'Đang rảnh'
-      //     clearInterval(myInterval)
-      //     resolve()
-      //   }
-      // },1000)
+    await (() => {
+      return new Promise(async (resolve) => {
 
-      
-      setTimeout(()=>{
-        status = 'Đang rảnh'
-        // clearInterval(myInterval)
-        resolve()
-      }, timecountdown)
-    }); })();
+        setTimeout(() => {
+          status = 'Xong'
+          // clearInterval(myInterval)
+          resolve()
+        }, timecountdown)
+      });
+    })();
     status = 'Đang tải file.'
     return reply.response(downloadcontent)
       .header('Content-Type', 'text/html')
       .header('Content-Disposition', 'attachment; filename= ' + 'demo.html')
   }
 });
-                                                          //PAGE
+//PAGE
 //INDEX 
-    server.route({
-      method: 'GET',
-      path: '/',
-      handler: {
-        file: {
-            path: './index.html',
-            confine: false
-        }
+server.route({
+  method: 'GET',
+  path: '/',
+  handler: {
+    file: {
+      path: './index.html',
+      confine: false
     }
-  });
+  }
+});
 //SAMPLE 
-    server.route({
-      method: 'GET',
-      path: '/sample',
-      handler: {
-        file: {
-            path: './sample.html',
-            confine: false
-        }
+server.route({
+  method: 'GET',
+  path: '/sample',
+  handler: {
+    file: {
+      path: './sample.html',
+      confine: false
+    }
+  }
+});
+//CREATE 
+server.route({
+  method: 'GET',
+  path: '/create',
+  handler: {
+    file: {
+      path: './create.html',
+      confine: false
+    }
+  }
+});
+//FORM 
+//   server.route({
+//     method: 'GET',
+//     path: '/form',
+//     handler: {
+//       file: {
+//           path: './form.html',
+//           confine: false
+//       }
+//   }
+// });
+//FILE 
+server.route({
+  method: 'GET',
+  path: '/public/{file*}',
+  handler: {
+    directory: {
+      path: './public'
+    }
+  }
+})
+//Download 
+server.route({
+  method: 'GET',
+  path: '/download',
+  handler: async (request, reply) => {
+    // let stream = fs.createReadStream('./demo.html');
+    // let streamData = new Readable().wrap(stream)
+    status = 'Đã tải file.'
+    return reply.response(downloadcontent)
+      .header('Content-Type', 'text/html')
+      .header('Content-Disposition', 'attachment; filename= ' + 'demo.html')
+  }
+})
+
+
+// Queue just one URL, with default callback
+const start = async (url, pageFrom, pageTo, filename) => {
+  var crawlerImage = await new Crawler({
+    maxConnections: maxConnect,
+    // This will be called for each crawled page
+    callback: async function (error, result, done) {
+      try {
+        status = 'Chưa xong'
+        // await console.log('get image')
+        let $ = result.$
+        await addItem($).then((count) => {
+          console.log('Added ' + count + ' items')
+        })
+      } catch (e) { }
     }
   });
-  //CREATE 
-      server.route({
-        method: 'GET',
-        path: '/create',
-        handler: {
-          file: {
-              path: './create.html',
-              confine: false
-          }
-      }
-    });
-    //FORM 
-      //   server.route({
-      //     method: 'GET',
-      //     path: '/form',
-      //     handler: {
-      //       file: {
-      //           path: './form.html',
-      //           confine: false
-      //       }
-      //   }
-      // });
-      //FILE 
-      server.route({  
-        method: 'GET',
-        path: '/public/{file*}',
-        handler: {
-          directory: { 
-            path: './public'
-          }
-        }
-      })
-      //Download 
-      server.route({  
-        method: 'GET',
-        path: '/download',
-        handler: async (request, reply) => {
-          // let stream = fs.createReadStream('./demo.html');
-          // let streamData = new Readable().wrap(stream)
-          status = 'Đã tải file.'
-          return reply.response(downloadcontent)
-            .header('Content-Type', 'text/html')
-            .header('Content-Disposition', 'attachment; filename= ' + 'demo.html')
-        }
-      })
-
-    
-    // Queue just one URL, with default callback
-    const start = async (url, pageFrom, pageTo,filename)=>{
-      var crawlerImage = new Crawler({
-        maxConnections : maxConnect,
-        // This will be called for each crawled page
-        callback : async function (error, result, done) {
-          try{
-            status = 'Chưa xong'
-            // await console.log('get image')
-              let $ = result.$
-              await addItem($).then((count)=>{
-                console.log('Added ' + count + ' items')
-              })
-          }catch(e){}
-        }
-      });
-      var c = new Crawler({
-          maxConnections : maxConnect,
-          // This will be called for each crawled page
-          callback : async function (error, result, done) {
-            try{
-              status = 'Chưa xong'
-            // await console.log('get link')
-              let $ = result.$
-              let data = []
-              try {
-                // await console.log('Page ' + countPage++)
-                $('h3 a.PreviewTooltip').each(async function(index, a) {
-                  try{await data.push(`${tientoLink}${a.attribs.href}`)}catch(e){}
-                });
-                data.forEach( async (item) => {
-                  try{await crawlerImage.queue(item)}catch(e){}
-                })
-      
-                await countHienTai++
-                // if(await (countHienTai == pageTo)) return ({message: 'DONE'})
-              }
-              catch(err) {
-                console.log(err.message)
-              }
-            }catch(e){}
-          }
-      });
-      const addItem = async ($) => {
-        try{
-          // await console.log('additem')
-          let dataImg = []
-          return new Promise(async (resolve, no) => {
-            let a = $('img')
-            // a = await a[0].children
-            for(let ii=0; ii<a.length; ii++) {
-              try{
-                // if(a[ii].type == 'tag' && (a[ii].name == 'img' || a[ii].name == 'gif' || a[ii].name == 'video')){
-                  await tongSo++
-                  // console.log((!dataAll.includes(a[ii].attribs.src)))
-                  if (await !dataAll.includes(a[ii].attribs.src)){
-                    await dataAll.push(a[ii].attribs.src)
-                    await dataImg.push(`<div class='divImage' style='width:25%;float:left;'><img id='image${id}' onClick="imageClick('#image${id++}')" style='max-width: 100%;max-height: 100%;' src="${a[ii].attribs.src}"></img></div>`)
-                  }else {
-                    await countTrung++
-                    await dataAll.push(a[ii].attribs.src)
-                  }
-                // }
-              }catch(e){}
-            }
-            status = 'Chưa xong'
-            // await console.log('ghifile')
-            downloadcontent +=await  dataImg.toString()
-                // await fs.appendFileSync(filename,dataImg,'utf8',function (err) {
-                //   //Kiểm tra nếu có lỗi thì xuất ra lỗi
-                //   if(err)
-                //       throw err;
-                //   else //nếu không thì hiển thị nội dung ghi file thành công
-                //       {
-                //         // console.log('Ghi file thanh cong!');
-                //       }
-                // });
-            // console.log(`Tong: ${tongSo} - Trung: ${countTrung}`)
-              status = 'Có thể tải xuống'
-              // await console.log('---- Done -----')
-              // await console.log(header)
+  var c = await new Crawler({
+    maxConnections: maxConnect,
+    // This will be called for each crawled page
+    callback: async function (error, result, done) {
+      try {
+        status = 'Chưa xong'
+        // await console.log('get link')
+        let $ = result.$
+        let data = []
+        try {
+          // await console.log('Page ' + countPage++)
+          $('h3 a.PreviewTooltip').each(async function (index, a) {
+            try { await data.push(`${tientoLink}${a.attribs.href}`) } catch (e) { }
+          });
+          data.forEach(async (item) => {
+            try { await crawlerImage.queue(item) } catch (e) { }
           })
-        }catch(e){}
-      }
-        //CHECK FILE EXIST
-        countHienTai = 0
-        count = 0
-        downloadcontent = header
 
-        
-        // if(await fs.existsSync(filename)){
-        //   await fs.unlinkSync(filename)
-        // }
-        // else{
-        // } 
-        // let header = '<head><style>.divImage{width: 25%;float:left;} .divImage:active{width: 100%;float:left;}</style></head>'
-        // await fs.appendFileSync(filename,header,'utf8',function (err) {
-        //   //Kiểm tra nếu có lỗi thì xuất ra lỗi
-        //   if(err)
-        //       throw err;
-        //   else //nếu không thì hiển thị nội dung ghi file thành công
-        //       {
-        //         // console.log('Ghi file thanh cong!');
-        //       }
-        // })
-
-        status = 'Bắt đầu tạo file'
-        await console.log('---- Start ----')
-        
-        // await console.log(header)
-        await c.queue(url);
-        count = pageFrom>=1 ? pageFrom : 1
-          for (count = 1; count <= pageTo; count++) {
-            try{
-              await c.queue(`${url}page-${count+1}`);
-            }catch(e){}
-          }
-        await console.log('- dataAll -'+dataAll)
+          await countHienTai++
+          // if(await (countHienTai == pageTo)) return ({message: 'DONE'})
+        }
+        catch (err) {
+          console.log(err.message)
+        }
+      } catch (e) { }
     }
+  });
+  const addItem = async ($) => {
+    try {
+      let dataImg = []
+      return new Promise(async (resolve, no) => {
+        let a = $('img')
+        for (let ii = 0; ii < a.length; ii++) {
+          try {
+            await tongSo++
+            if (!dataAll.includes(a[ii].attribs.src)) {
+              dataAll.push(a[ii].attribs.src)
+              dataImg.push(`<div class='divImage' style='width:25%;float:left;'><img id='image${id}' onClick="imageClick('#image${id++}')" style='max-width: 100%;max-height: 100%;' src="${a[ii].attribs.src}"></img></div>`)
+            } else {
+              countTrung++
+              dataAll.push(a[ii].attribs.src)
+            }
+          } catch (e) { }
+        }
+        status = 'Chưa xong'
+        downloadcontent += await dataImg.toString()
+        status = 'Có thể tải xuống'
+        resolve(a.length)
+      })
+    } catch (e) { }
+  }
+
+  countHienTai = 0
+  count = 0
+  downloadcontent = header
+
+  status = 'Bắt đầu tạo file'
+  await console.log('---- Start ----')
+
+  await c.queue(url);
+  count = pageFrom >= 1 ? pageFrom : 1
+  for (count = 1; count <= pageTo; count++) {
+    try {
+      await c.queue(`${url}page-${count + 1}`);
+    } catch (e) { }
+  }
+  await console.log('- DONE -')
+}
 // set up logging
 const good_options = {
-    ops: {
-        interval: 1000
-    },
-    reporters: {
-      myConsoleReporter: [{
-          module: 'good-squeeze',
-          name: 'Squeeze',
-          args: [{ log: '*', response: '*' }]
-      }, {
-          module: 'good-console'
-      }, 'stdout'],
-    }
-  };
-  
+  ops: {
+    interval: 1000
+  },
+  reporters: {
+    myConsoleReporter: [{
+      module: 'good-squeeze',
+      name: 'Squeeze',
+      args: [{ log: '*', response: '*' }]
+    }, {
+      module: 'good-console'
+    }, 'stdout'],
+  }
+};
+
 const init = async () => {
   try {
     await server.register([{
