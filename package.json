@@ -11,7 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@hapi/hapi": "^18.3.1",
+    "@hapi/hapi": "^19.1.1",
     "axios": "^0.19.0",
     "crawler": "^1.2.1",
     "crypto": "^1.0.1",
