@@ -33,6 +33,6 @@
     "npm": "^6.9.0",
     "request": "^2.88.0",
     "stream": "0.0.2",
-    "xml-crypto": "^1.4.0"
+    "xml-crypto": "^2.0.0"
   }
 }
